@@ -8,6 +8,7 @@ const cardsContainer = document.querySelector('.cards-container');
 const productDetailContainer = document.querySelector('.detail');
 const closeProductDetail = document.querySelector('.product-detail-close');
 
+
 const productList = [];
 
 
@@ -15,6 +16,7 @@ navEmail.addEventListener('click', toggleDesktopMenu);
 menuHamIcon.addEventListener('click', toggleMobileMenu);
 menuCarritoIcon.addEventListener('click', toggleCarritoAside);
 closeProductDetail.addEventListener('click', closeDetails);
+
 
 function toggleDesktopMenu() {
     aside.classList.add('inactive');
@@ -90,6 +92,7 @@ productList.push({
 });
 
 renderProducts(productList);
+
 
 function renderProducts(arreglo) {
     for (product of arreglo) {
