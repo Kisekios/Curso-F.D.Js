@@ -362,7 +362,7 @@ nav {
   margin-bottom: 36px;
 }
 .info p:nth-child(3) {
-  color: var(--very-light-pink);
+  color: #5c4b4b;
   font-size: var(--sm);
   margin-top: 0;
   margin-bottom: 36px;
