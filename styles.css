@@ -401,7 +401,7 @@ nav {
   height: 50px;
 }
 
-.add-to-cart-button {
+.add-to-cart-button, #add-to-card {
   display: flex;
   align-items: center;
   justify-content: center;

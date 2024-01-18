@@ -15,37 +15,16 @@ const priceContainerAside = document.getElementById('price');
 const namePictureContainerAside = document.getElementById('namePicture');
 const detailProductContainerAside = document.getElementById('detailProduct');
 const addToCardBtn = document.querySelector('.add-to-cart-button');
-
+const addToCardBtnAside = document.querySelector('.primary-button2');
+const addToCarBtnPicture = document.getElementsByClassName('add-to-cart-picture');
 
 /* Variables Globales */
 
 
 const productList = [];
+let addToCard = [];
 let asideSeleccion;
-let selectedProduct;
-
-
-/* Lectura de eventos en HTML */
-
-
-navEmail.addEventListener('click', toggleDesktopMenu);
-menuHamIcon.addEventListener('click', toggleMobileMenu);
-menuCarritoIcon.addEventListener('click', toggleCarritoAside);
-closeProductDetail.addEventListener('click', closeDetails);
-addToCardBtn.addEventListener('click', addToCardContainer);
-
-
-function renderAsideDetail() {
-    for (elemento of imgSelect) {
-        elemento.addEventListener('click', function () {
-            const nameOfPictureClick = this.getAttribute('id')
-            asideSeleccion = productList.find(objeto => objeto.name === nameOfPictureClick);
-            renderInfoDetailAside(asideSeleccion);
-        })
-    }
-}
-
-
+let selectedProduct = false;
 
 
 /* Funciones para mostrar/ocultar los items del HTML */
@@ -81,7 +60,6 @@ function openProductDetail() {
     aside.classList.add('inactive');
 
     productDetailContainer.classList.remove('inactive');
-    renderAsideDetail();
 }
 
 function closeDetails() {
@@ -96,7 +74,7 @@ function renderProducts(arreglo) {
     for (product of arreglo) {
         const productCard = document.createElement('div');
         productCard.classList.add('product-card');
-        productCard.id = product.name
+        productCard.id = product.name;
 
         const img = document.createElement('img');
         img.setAttribute('src', product.image);
@@ -117,14 +95,17 @@ function renderProducts(arreglo) {
 
         const productInfoFigure = document.createElement('figure');
         const AddToCard = document.createElement('button');
-        AddToCard.classList.add('add-to-cart-button');
+        AddToCard.classList.add('add-to-cart-picture');
         AddToCard.id = 'add-to-card';
-        AddToCard.addEventListener('click', addToCardContainer);
+        AddToCard.addEventListener('click', function () {
+            selectedProduct = true;
+        });
+
         const productImgCard = document.createElement('img');
         productImgCard.setAttribute('src', './icons/bt_add_to_cart.svg');
 
         productInfoFigure.appendChild(AddToCard);
-        AddToCard.appendChild(productImgCard)
+        AddToCard.appendChild(productImgCard);
 
         productInfo.appendChild(productInfoDiv);
         productInfo.appendChild(productInfoFigure);
@@ -134,7 +115,6 @@ function renderProducts(arreglo) {
 
         cardsContainer.appendChild(productCard);
     }
-
 }
 
 function renderInfoDetailAside(producto) {
@@ -145,16 +125,9 @@ function renderInfoDetailAside(producto) {
     detailProductContainerAside.innerText = "Imagenes de series animadas";
 }
 
-function addToCardContainer() {   
-    console.log('lol')
-    for (elemento of imgSelect) {
-        elemento.addEventListener('click', function () {
-            const nameOfPictureClick = this.getAttribute('id')
-            selectedProduct = productList.find(objeto => objeto.name === nameOfPictureClick);
-        })
-    }
+function addToCardContainer() {
+    console.log(addToCard);
 }
-
 
 
 /* Listado de productos */
@@ -197,15 +170,38 @@ productList.push({
 });
 
 
-/* Llamada a las funciones */
+/* Utilidad */
+
+// Redenderizar los objetos en la pagina
+renderProducts(productList); 
+
+// Agrega al carrito desde el icono inferior derecho del producto
+function addToCardButton(producto) {
+    if (selectedProduct === true) {
+        addToCard.push(producto);
+        selectedProduct = false;
+        addToCardContainer();
+    }
+}
+
+/* Lectura de eventos en HTML */
 
 
-renderProducts(productList);
+navEmail.addEventListener('click', toggleDesktopMenu);
+menuHamIcon.addEventListener('click', toggleMobileMenu);
+menuCarritoIcon.addEventListener('click', toggleCarritoAside);
+closeProductDetail.addEventListener('click', closeDetails);
+addToCardBtn.addEventListener('click', addToCardContainer);
 
+addToCardBtnAside.addEventListener('click', function () {
+    addToCard.push(asideSeleccion);
+});
 
-
-
-
-
-
-
+for (elemento of imgSelect) {
+    elemento.addEventListener('click', function () {
+        const nameOfPictureClick = this.getAttribute('id');
+        asideSeleccion = productList.find(objeto => objeto.name === nameOfPictureClick);
+        renderInfoDetailAside(asideSeleccion);
+        addToCardButton(asideSeleccion);
+    })
+}
