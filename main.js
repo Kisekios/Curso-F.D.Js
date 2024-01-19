@@ -227,6 +227,7 @@ productList.push({
 
 /* Utilidad */
 
+
 // Redenderizar los objetos en la pagina
 renderProducts(productList);
 
@@ -238,7 +239,6 @@ function addToCardButton(producto) {
         addToCardContainer();
     }
 }
-
 
 
 /* Lectura de eventos en HTML */
@@ -257,8 +257,6 @@ for (elemento of imgSelect) {
         addToCardButton(asideSeleccion);
     })
 }
-
-
 
 navEmail.addEventListener('click', toggleDesktopMenu);
 menuHamIcon.addEventListener('click', toggleMobileMenu);
