@@ -10,13 +10,17 @@ const cardsContainer = document.querySelector('.cards-container');
 const productDetailContainer = document.querySelector('.detail');
 const closeProductDetail = document.querySelector('.product-detail-close');
 const imgSelect = document.getElementsByClassName('product-card');
-const imgDetail = document.getElementById('imgdetail');
+const imgDetail = document.getElementById('img-detail');
 const priceContainerAside = document.getElementById('price');
 const namePictureContainerAside = document.getElementById('namePicture');
 const detailProductContainerAside = document.getElementById('detailProduct');
 const addToCardBtn = document.querySelector('.add-to-cart-button');
 const addToCardBtnAside = document.querySelector('.primary-button2');
-const addToCarBtnPicture = document.getElementsByClassName('add-to-cart-picture');
+const addToOrderContain = document.querySelector('.my-order-content')
+const totalPrice = document.querySelector('#total-price');
+const cantidadEnAddCart = document.querySelector('#cantidad-productos-add-cart');
+const cancelPurchase = document.getElementsByClassName('cancel-purchase');
+
 
 /* Variables Globales */
 
@@ -25,6 +29,7 @@ const productList = [];
 let addToCard = [];
 let asideSeleccion;
 let selectedProduct = false;
+let indexOfAddToCart = 0; // indica el indice segun se haya agregado al carrito(addToCar)
 
 
 /* Funciones para mostrar/ocultar los items del HTML */
@@ -52,6 +57,9 @@ function toggleCarritoAside() {
     productDetailContainer.classList.add('inactive');
 
     aside.classList.toggle('inactive');
+    if (addToCard.length == 0){
+        totalPrice.innerText = '$' + 0;
+    }
 }
 
 function openProductDetail() {
@@ -95,7 +103,6 @@ function renderProducts(arreglo) {
 
         const productInfoFigure = document.createElement('figure');
         const AddToCard = document.createElement('button');
-        AddToCard.classList.add('add-to-cart-picture');
         AddToCard.id = 'add-to-card';
         AddToCard.addEventListener('click', function () {
             selectedProduct = true;
@@ -126,7 +133,55 @@ function renderInfoDetailAside(producto) {
 }
 
 function addToCardContainer() {
-    console.log(addToCard);
+    addToOrderContain.innerText = '';
+    cantidadEnAddCart.innerText = addToCard.length;
+
+    let precioTotal = 0;
+    for (product of addToCard) {
+        precioTotal = precioTotal + product.price;
+        const productAddedToCart = document.createElement('div');
+        productAddedToCart.classList.add('shopping-cart');
+
+        const figureCartContain = document.createElement('figure');
+
+        const pictureProduct = document.createElement('img');
+        pictureProduct.setAttribute('src', product.image);
+
+        const nameOfProduct = document.createElement('p');
+        nameOfProduct.innerText = product.name;
+
+        const priceOfProduct = document.createElement('p');
+        priceOfProduct.innerText = '$' + product.price;
+
+        const cancelPurchaseBtn = document.createElement('div');
+        cancelPurchaseBtn.classList.add('cancel-purchase')
+        cancelPurchaseBtn.setAttribute('id', indexOfAddToCart);
+        const cancelPurchaseIcon = document.createElement('img');
+        cancelPurchaseIcon.setAttribute('src', "./icons/icon_close.png");
+        cancelPurchaseIcon.alt = 'close';
+
+        totalPrice.innerText = '$' + precioTotal;
+
+        cancelPurchaseBtn.appendChild(cancelPurchaseIcon)
+        figureCartContain.appendChild(pictureProduct);
+        productAddedToCart.appendChild(figureCartContain);
+        productAddedToCart.appendChild(nameOfProduct);
+        productAddedToCart.appendChild(priceOfProduct);
+        productAddedToCart.appendChild(cancelPurchaseBtn);
+        addToOrderContain.appendChild(productAddedToCart);
+        indexOfAddToCart++;
+    }
+    indexOfAddToCart=0;
+    for (elemento of cancelPurchase) {
+        elemento.addEventListener('click', function () {
+            const nameOfPictureClick = this.getAttribute('id');
+            addToCard.splice(nameOfPictureClick, 1);
+            addToCardContainer();
+        })
+    }
+    if (addToCard.length == 0){
+        totalPrice.innerText = '$' + 0;
+    }
 }
 
 
@@ -173,7 +228,7 @@ productList.push({
 /* Utilidad */
 
 // Redenderizar los objetos en la pagina
-renderProducts(productList); 
+renderProducts(productList);
 
 // Agrega al carrito desde el icono inferior derecho del producto
 function addToCardButton(producto) {
@@ -184,19 +239,16 @@ function addToCardButton(producto) {
     }
 }
 
+
+
 /* Lectura de eventos en HTML */
 
-
-navEmail.addEventListener('click', toggleDesktopMenu);
-menuHamIcon.addEventListener('click', toggleMobileMenu);
-menuCarritoIcon.addEventListener('click', toggleCarritoAside);
-closeProductDetail.addEventListener('click', closeDetails);
-addToCardBtn.addEventListener('click', addToCardContainer);
 
 addToCardBtnAside.addEventListener('click', function () {
     addToCard.push(asideSeleccion);
 });
 
+//Lee la imagen que haya sido cliqueada y la envia a funciones
 for (elemento of imgSelect) {
     elemento.addEventListener('click', function () {
         const nameOfPictureClick = this.getAttribute('id');
@@ -205,3 +257,11 @@ for (elemento of imgSelect) {
         addToCardButton(asideSeleccion);
     })
 }
+
+
+
+navEmail.addEventListener('click', toggleDesktopMenu);
+menuHamIcon.addEventListener('click', toggleMobileMenu);
+menuCarritoIcon.addEventListener('click', toggleCarritoAside);
+closeProductDetail.addEventListener('click', closeDetails);
+addToCardBtn.addEventListener('click', addToCardContainer);

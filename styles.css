@@ -296,7 +296,7 @@ nav {
   object-fit: cover;
 }
 
-#add-to-card{
+#add-to-card {
   background-color: var(--white);
 }
 
@@ -401,11 +401,25 @@ nav {
   height: 50px;
 }
 
-.add-to-cart-button, #add-to-card {
+.add-to-cart-button,
+#add-to-card {
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
+}
+
+.cancel-purchase{
+  border: none;
+  background: var(--white);
+  cursor: pointer;
+  border-radius: 19px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cancel-purchase:hover {
+  background: #acd9b2;
 }
 
 @media (max-width: 640px) {
